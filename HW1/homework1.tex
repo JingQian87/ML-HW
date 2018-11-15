@@ -1,0 +1,140 @@
+\documentclass[twoside,11pt]{homework}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx} 
+
+\coursename{COMS 4771 Machine Learning (2018 Fall)} 
+
+\studname{Jing Qian}    % YOUR NAME GOES HERE
+\studmail{jq2282@columbia.edu}% YOUR UNI GOES HERE
+\hwNo{1}                   % THE HOMEWORK NUMBER GOES HERE
+\date{\today} % DATE GOES HERE
+
+
+\begin{document}
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 2}
+(iii).
+%
+\begin{equation}
+\begin{split}
+\mathbb{E} [x] &= \frac{1}{n} \sum_{i=1}^n [1 \times b + 0 \times (1-b)]\\
+		      &= \frac{1}{n} \sum_{i=1}^n b \\
+		      &= b, \\
+\mathbb{E} [x^2 ] 	&= \frac{1}{n} \sum_{i=1}^n [1^2 \times b + 0^2 \times (1-b)]\\
+		      &= \frac{1}{n} \sum_{i=1}^n b \\
+		      &= b, \\
+\mathrm{Var}[x] &= \mathbb{E} [x^2 ] - \mathbb{E} [x]^2 \\
+		        &= b - b^2.
+\end{split}
+\end{equation}
+%
+\\\\
+(iv).
+Using the invariance property of MLE shown in Problem 1(ii), the MLE for the coin's variance is the variance function of the MLE bias $\hat{b}$.
+From subproblem (i), we get the MLE bias $\hat{b} =\frac{\sum_{i=1}^n x_i}{n} $.
+From subproblem (ii), we get the variance of this coin is $\mathrm{Var}[x] = b - b^2$.
+So the MLE for the coin's variance is :
+%
+\begin{equation}
+\hat{\mathrm{Var}}[x] = \hat{b}- \hat{b}^2 = \frac{\sum_{i=1}^n x_i}{n} - (\frac{\sum_{i=1}^n x_i}{n})^2.
+\end{equation}
+\\\\
+(v).
+\newpage
+%%%%%%%%%%%%%
+(vi).
+When the parameter $b$ has uniform distribution, MAP estimate equals MLE.
+
+From the definition, the MLE and MAP estimations of parameter $b$ are:
+\begin{equation}
+\begin{split}
+b_{\mathrm{MLE}} &= \mathrm{arg\ max}_b \prod_{i=1}^N P(\overrightarrow{x_i}|b) \\
+			   &= \mathrm{arg\ max}_b \sum_{i=1}^N \log P(\overrightarrow{x_i}|b) , \\
+b_{\mathrm{MAP}} &= \mathrm{arg\ max}_b \prod_{i=1}^N P(b|\overrightarrow{x_i}) \\
+                                   & = \mathrm{arg\ max}_b \prod_{i=1}^N P(\overrightarrow{x_i}|b) P(b) \\
+                                   &= \mathrm{arg\ max}_b (\log P(b) + \sum_{i=1}^N \log P(\overrightarrow{x_i}|b)).
+\end{split}
+\end{equation}
+The difference between two estimations is the $\log P(b)$ term in $b_{\mathrm{MAP}}$.
+To make $b_{\mathrm{MLE}} = b_{\mathrm{MAP}}$, $\mathrm{arg\ max}_b \log P(b) $ must be zero, which means $P(b)$ is constant and hence is uniform distribution.
+In other words, MAP estimate equlas MLE when $P(b)$ is a uniform distribution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3.2}
+Let $f$ be the median of $y$ given $x$.
+Then $f$ would be the optimal predictor if we have $Q(g) - Q(f) \ge 0$ for any $x$ in the domain.
+
+If $f < g$:
+%
+\begin{equation}
+\begin{split}
+\mathbb{E}[|g-y|] - \mathbb{E}[|f-y|] &=  \mathbb{E}[|g-y| - |f-y|] \\
+&= \mathrm{Pr}[y \le f] (|g-y| - |f-y|) + \mathrm{Pr}[y > f] (|g-y| - |f-y|) \\
+&= \mathrm{Pr}[y \le f] (g - y - f + y) + \mathrm{Pr}[y > f] (|y-g| - |y-f|) \\
+&\ge \mathrm{Pr}[y \le f] (g - f) + \mathrm{Pr}[y > f] [-(g-f)] \\
+&= (g-f) [\mathrm{Pr}[y \le f]  -  \mathrm{Pr}[y > f]] \\
+&\ge 0
+\end{split}
+\end{equation}
+%
+according to the property of median. 
+On the other hand, if $f > g$, similarly, we have:
+%
+\begin{equation}
+\begin{split}
+\mathbb{E}[|g-y|] - \mathbb{E}[|f-y|] &=  \mathbb{E}[|g-y| - |f-y|] \\
+&= \mathrm{Pr}[y \ge f] (|g-y| - |f-y|) + \mathrm{Pr}[y < f] (|g-y| - |f-y|)  \\
+%&= \mathrm{Pr}[y \ge f] (y - g - y + f) + \mathrm{Pr}[y < f] (|y-g| - |y-f|) \\
+&\ge \mathrm{Pr}[y \ge f] (f-g) + \mathrm{Pr}[y < f] [-(f-g)] \\
+&= (f-g) [\mathrm{Pr}[y \ge f]  -  \mathrm{Pr}[y < f]] \\
+&\ge 0
+\end{split}
+\end{equation}
+%
+Since $\mathbb{E}[|g-y|] - \mathbb{E}[|f-y|] \ge 0$ at any given $x$, $Q(g) \ge Q(f)$, the median of $y$ is the optimal predictor.
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 5}
+For every training set with $(x_1, y_1), \cdots, (x_n, y_n)$ i.i.d.samples, we could find one unique $w$ to minimize its training error $\mathcal{R}$.
+That is to say,
+\begin{equation}
+   \hat{w} = \mathrm{arg\ min} \hat{\mathcal{R}}(w) = \mathrm{arg\ min}\ \frac{1}{n} \sum_{i=1}^n (w \cdot x_i - y_i)^2. 
+\end{equation}
+For any $w$, we have $\hat{\mathcal{R}}(\hat{w}) \le \hat{\mathcal{R}}(w) $.% and hence $\mathbb{E}[\hat{\mathcal{R}}(\hat{w})] \le \mathbb{E}[\hat{\mathcal{R}}(w)]$.
+
+Similarly, for another i.i.d. random sample consisted of $(\tilde{x_1}, \tilde{y_1}), \cdots, (\tilde{x_n}, \tilde{y_n})$:
+\begin{equation}
+  \tilde{w} = \mathrm{arg\ min} \tilde{\mathcal{R}}(w) = \mathrm{arg\ min}\ \frac{1}{n} \sum_{i=1}^n (w \cdot \tilde{x}_i - \tilde{y}_i)^2.   
+\end{equation}
+ For any $w$, we have $\tilde{\mathcal{R}}(\tilde{w}) \le \tilde{R}(w) $.% and hence $\mathbb{E}[\tilde{\mathcal{R}}(\tilde{w})] \le \mathbb{E}[\tilde{\mathcal{R}}(w)]$.
+Here the inequality holds for $\hat{w}$ since it holds for any $w$,  $\tilde{\mathcal{R}}(\tilde{w}) \le \tilde{\mathcal{R}}(\hat{w})$.
+%$\mathbb{E}[\tilde{\mathcal{R}}(\tilde{w})] \le \mathbb{E}[\tilde{\mathcal{R}}(\hat{w})]$.
+
+Since both sets are i.i.d. samples from the same domain:
+\begin{equation}
+\begin{split}
+   \mathbb{E}[\hat{\mathcal{R}}(\hat{w})] &= \mathrm{min}\ \mathbb{E} [(w \cdot x - y)^2]  \\
+   \mathbb{E}[\tilde{\mathcal{R}}(\tilde{w})] &= \mathrm{min}\ \mathbb{E} [(w \cdot x - y)^2]
+\end{split}
+\end{equation}
+So the expectations of training error of two i.i.d. random samples equal:
+$\mathbb{E}[\hat{\mathcal{R}}(\hat{w})] = \mathbb{E}[\tilde{\mathcal{R}}(\tilde{w})]$.    
+Then we have:
+\begin{equation}
+    \mathbb{E}[\hat{\mathcal{R}}(\hat{w})] = \mathbb{E}[\tilde{\mathcal{R}}(\tilde{w})] \le \mathbb{E}[\tilde{\mathcal{R}}(\hat{w})].
+\end{equation}
+
+Since the set $(\tilde{x_1}, \tilde{y_1}), \cdots, (\tilde{x_n}, \tilde{y_n})$ is a i.i.d.random sample from the domain, the inequality above holds for the generalization of any i.i.d.random samples with squared error $\mathcal{R}$.
+In other words:
+\begin{equation}
+    \mathbb{E}[\hat{\mathcal{R}}(\hat{w})]  \le \mathbb{E}[\mathcal{R} (\hat{w})].
+\end{equation}
+
+
+
+\end{document} 
