@@ -1,0 +1,58 @@
+\documentclass[twoside,11pt]{homework}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx} 
+
+\coursename{COMS 4771 Machine Learning (2018 Fall)} 
+
+\studname{Jing Qian}    % YOUR NAME GOES HERE
+\studmail{jq2282@columbia.edu}% YOUR UNI GOES HERE
+\hwNo{2}                   % THE HOMEWORK NUMBER GOES HERE
+\date{\today} % DATE GOES HERE
+
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3}
+\color{blue} (Jing, Nov 14)
+\color{black}
+\subsection*{(i)}
+Since $b \in \{0, 1\}^p$, there are $2^p$ possible $b$s.
+Since the entries of $A$ are picked uniformly at random, the probability of $x_i$ hashes to any $b$ is equal and hence $1/2^p$.
+\color{red} what's the point of the hint?
+\color{black}
+
+\subsection*{(ii)}
+From part (i), the probability of $x_i$ hashing to any $b$ is $1/2^p$, the probability of $x_j$ hashing to any $b$ is $1/2^p$.
+So the probability of $x_j$ hashing to the same vector that $x_i$ is hashing to is $1/2^p$.
+
+\subsection*{(iii)}
+The probability of no collisions among the $x_i$ could be represented as following:
+%
+\begin{equation}
+\begin{split}
+\mathrm{Prob\ (no\ collisions)} &= 1 - \mathrm{Prob\ (exist\ collisions)} \\
+				       &\ge 1 - \sum\limits_{1\le i <j \le m} \mathrm{Prob}(x_i, x_j \mathrm{\ collide})\\
+				       &= 1 -  \sum\limits_{1\le i <j \le m} 1/2^p \\
+				       &= 1 - \binom{m}{2} \frac{1}{2^p} \\
+				       &= 1- \frac{m(m-1)}{2}\frac{1}{2^p} \\
+				       &\ge 1 - \frac{m^2}{2}\frac{1}{2^p}
+\end{split}
+\end{equation}
+%
+ If $p \ge 2 \log_2 m$,
+ %
+\begin{equation}
+\begin{split}
+\mathrm{Prob\ (no\ collisions)} &\ge  1- \frac{m^2}{2}\frac{1}{2^p} \\
+					&\ge 1 - \frac{m^2}{2} \frac{1}{m^2} \\
+					&= 1 - 1/2 \\
+					&= 1/2
+\end{split}
+\end{equation}
+%
+ So if  $p \ge 2 \log_2 m$, there are no collisions among the $x_i$ with probability at least 1/2.
+ 
+\end{document} 
