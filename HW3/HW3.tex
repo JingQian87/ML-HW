@@ -19,14 +19,73 @@
 \color{blue} (Jing, Nov 14)
 \color{black}
 \subsection*{(i)}
-Since $b \in \{0, 1\}^p$, there are $2^p$ possible $b$s.
-Since the entries of $A$ are picked uniformly at random, the probability of $x_i$ hashes to any $b$ is equal and hence $1/2^p$.
-\color{red} what's the point of the hint?
-\color{black}
+%Since $b \in \{0, 1\}^p$, there are $2^p$ possible $b$s.
+%Since the entries of $A$ are picked uniformly at random, the probability of $x_i$ hashes to any $b$ is equal and hence $1/2^p$.
+%\color{red} what's the point of the hint?
+%\color{black}
+%For the convenious for writing matrix equations, we slightly modify the definition: using the notation  $x^{(1)}, \cdots, x^{(m)} \in \{0, 1\}^n$instead of  $x_1, \cdots, x_m \in \{0, 1\}^n$.
+%So 
+With the matrix $A$, binary vector $x_i$ is hashed to $b$ could be expressed as following:
+%
+\begin{equation}
+\begin{split}
+b &= A x_i \\
+\left[\begin{matrix} b^1 \\b^2\\ \cdots \\b^p \end{matrix} \right]&= \left[\begin{matrix} A^1  \\A^2 \\ \cdots \\A^p \end{matrix} \right]  x_i\\
+&= \left[\begin{matrix} (\sum\limits_{l=1}^n A^{1l} x_i^l)\ \mathrm{mod}\ 2\\ (\sum\limits_{l=1}^n A^{2l} x_i^l)\ \mathrm{mod}\ 2\\ \cdots \\ (\sum\limits_{l=1}^n A^{pl} x_i^l)\ \mathrm{mod}\ 2 \end{matrix} \right]
+\end{split}
+\end{equation}
+
+Take the $t$-th element of $b$ as an example: $b^t =  ((\sum\limits_{l=1}^n A^{tl}x_i^l)\  \mathrm{mod}\  2)$.
+Since $x^i \in \{0, 1\}^n$, supposing there are $n_i$ nonzero elements in $x_i$, then $\sum\limits_{l=1}^n A^{tl} x_i^l$ is actually to randomly pick nonzero elements from the $n_i$ nonzero elements in $x_i$.
+And $b^t =  ((\sum\limits_{l=1}^n A^{tl} x_i^l)\ \mathrm{mod}\ 2)$ is in fact describing whether we pick even or odd number of nonzero elements from all the nonzero elements in $x_i$.
+Since $A^t$ is picked uniformly at random, the probability of the $t$-th entry of $b$, $b^t =  0$ is $1/2$ and that of $b^t  = 1$ is also $1/2$.
+And this is true for any $t$ between 1 and $p$. 
+Because different entries of matrix $A$ are independent with each other, 
+Prob($x_i \rightarrow b$) = $\prod\limits_{t=1}^p \mathrm{Prob}(A^t x_i\rightarrow b^t) = \prod\limits_{t=1}^p 1/2 = 1/2^p.$
 
 \subsection*{(ii)}
+We could do this problem in two methods.
+\\\\
+METHOD 1:ß
 From part (i), the probability of $x_i$ hashing to any $b$ is $1/2^p$, the probability of $x_j$ hashing to any $b$ is $1/2^p$.
 So the probability of $x_j$ hashing to the same vector that $x_i$ is hashing to is $1/2^p$.
+\\\\
+METHOD 2:
+$x_i$ and $x_j$ hash to the same vector means: $A x_i = A x_j$：
+%
+\begin{equation}
+\begin{split}
+\left[\begin{matrix} (\sum\limits_{l=1}^n A^{1l} x_i^l)\ \mathrm{mod}\ 2\\ (\sum\limits_{l=1}^n A^{2l} x_i^l)\ \mathrm{mod}\ 2\\ \cdots \\ (\sum\limits_{l=1}^n A^{pl} x_i^l)\ \mathrm{mod}\ 2 \end{matrix} \right]
+= \left[\begin{matrix} (\sum\limits_{l=1}^n A^{1l} x_j^l)\ \mathrm{mod}\ 2\\ (\sum\limits_{l=1}^n A^{2l} x_j^l)\ \mathrm{mod}\ 2\\ \cdots \\ (\sum\limits_{l=1}^n A^{pl} x_j^l)\ \mathrm{mod}\ 2 \end{matrix} \right]
+\end{split}
+\end{equation}
+%
+Then
+%
+\begin{equation}
+\begin{split}
+\left[\begin{matrix} (\sum\limits_{l=1}^n A^{1l} [x_i^l  - x_j^l])\ \mathrm{mod}\ 2\\ (\sum\limits_{l=1}^n A^{2l} [x_i^l  - x_j^l])\ \mathrm{mod}\ 2\\ \cdots \\ (\sum\limits_{l=1}^n A^{pl} [x_i^l  - x_j^l])\ \mathrm{mod}\ 2 \end{matrix} \right]
+= \left[\begin{matrix} 0\\ 0\\ \cdots \\0\end{matrix} \right]
+\end{split}
+\end{equation}
+%
+which means $A(x_i - x_j) = 0$.
+
+Supposing $x_i$ and $x_j$ have $m$ differernt elements.
+Then any $A^t(x_i - x_j) = 0$ for  $(1 \le t \le p)$ means to pick even number of elements from the $m$ elements.
+This is the probability of a random variable X with binomial distribution Binomial($m, p_x$) being even where $p_x = 1/2$ because this is a random and uniform case.
+So:
+\begin{equation}
+\begin{split}
+\mathrm{Prob}(A^t(x_i - x_j) = 0) &= \mathrm{Prob\ (X}_{m, p_x}\mathrm{\ is\ even})\\
+&= \frac{1}{2} (1 + (1-2p_x)^m) \\
+&= \frac{1}{2} (1 + (1-2 \times \frac{1}{2})^m) \\
+&= \frac{1}{2}
+\end{split}
+\end{equation}
+Because diffferent elements of $b$ are independent with each other,
+Prob($A(x_i - x_j) = 0$) = $\prod\limits_{t=1}^p \mathrm{Prob}(A^t(x_j - x_j) = 0) = \prod\limits_{t=1}^p 1/2 = 1/2^p.$
+
 
 \subsection*{(iii)}
 The probability of no collisions among the $x_i$ could be represented as following:
