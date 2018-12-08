@@ -11,46 +11,32 @@ D = np.matrix([[0, 206, 429, 1504, 963, 2976, 3095, 2979, 1949],
 	 [2979, 2786, 2631, 2687, 2054, 1131, 379, 0, 1059],
 	 [1949, 1771, 1616, 2037, 996, 1307, 1235, 1059, 0]])
 
-alpha = 0.01
+alpha = 0.05
 niter = 10000
-L = {}
 Cities = ['BOS', 'NYC', 'DC', 'MIA', 'CHI', 'SEA', 'SF', 'LA', 'DEN']
 n = len(Cities)
-for i in Cities:
+L = np.zeros((n, 2))
+for i in range(n):
 	L[i] = np.array([random.randrange(0, 4000)+0.1, random.randrange(0, 4000)+0.1])
 
-def SGD(L):
-	while niter > 0:
-		for i in range(n):
-			der = np.zeros((2))
-			for j in range(n):
-				if j != i:
-					s = L[i] - L[j]
-                	der += (1 - D[i, j]/np.linalg.norm(s)) * 2 * s
+for i in range(n):
+    L[i] = np.array([random.randrange(0, 4000)+0.1, random.randrange(0, 4000)+0.1])
+#L = np.zeros((n, 2))
+niter = 10000
+while niter > 0:
+    for i in range(n):
+        der = np.zeros((2))
+        for j in range(n):
+            if j != i:
+                s = L[i] - L[j]
+                der += (1 - D[i, j]/np.linalg.norm(s)) * 2 * s
                     #print(i, j, der)
-        	L[i] -= alpha * der
-		niter -= 1
-	return L
-
-def BGD(L):
-	while niter > 0:
-	    tmp = np.zeros((n, 2))
-	    for i in range(n):
-	        der = np.zeros(2)
-	        for j in range(n):
-	            if j != i:
-	                s = L[i] - L[j]
-	                der += (1 - D[i, j]/np.linalg.norm(s)) * 2 * s
-	                    #print(i, j, der)
-	        tmp[i] = der
-	    L -= alpha * tmp
-	    niter -= 1
-	return L
-
-
+        L[i] -= alpha * der
+    niter -= 1
+    #print(t, L)
 import matplotlib.pyplot as plt
 colors = ['b','g','r','c','m','y','k','grey','purple']
 for i in range(n):
     plt.scatter(L[i,0], L[i,1], c= colors[i], label=Cities[i])#, color=)
 plt.legend()
-plt.show() 
+plt.show()   
